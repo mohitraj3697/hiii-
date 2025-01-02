@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8, #845ef7, #5c7cfa, #339af0, #22b8cf, #20c997, #51cf66, #94d82d, #fcc419, #ff922b);
+            background-size: 300% 300%;
+            animation: gradient 10s ease infinite;
+            color: rgb(94, 178, 41);
+            text-align: center;
+            padding: 50px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(2.05);
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input:focus, button:focus {
+            outline: none;
+        }
+
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #47eaff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ask Your Query</h1>
+        <input type="text" id="queryInput" placeholder="Type your query here...">
+        <button onclick="sendQuery()">Send</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        async function sendQuery() {
+            const query = document.getElementById('queryInput').value;
+            const responseDiv = document.getElementById('response');
+
+            // Replace 'YOUR_API_KEY' with your actual API key
+            const apiKey = 'YOUR_API_KEY';
+            const apiUrl = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    prompt: query,
+                    max_tokens: 150
+                })
+            });
+
+            const data = await response.json();
+            responseDiv.innerHTML = `<p>${data.choices[0].text}</p>`;
+        }
+    </script>
+</body>
+</html>
